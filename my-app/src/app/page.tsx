@@ -1,13 +1,13 @@
 
-
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 text-gray-800">
-      <section className="bg-blue-600 text-white py-20">
+      <section className="bg-blue-600 text-white py-20 justify-center items-center">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             CareerCompass
           </h1>
+
           <p className="max-w-2xl mx-auto text-lg mb-6">
             Personalized counseling, resume reviews, and interview prep to help you land your dream career.
           </p>
@@ -42,12 +42,12 @@ export default function Home() {
 
       <section className="py-16 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
-        <p className="mb-6">Book a free consultation today and take the first step towards your dream career.</p>
+        <p className="mb-6">With free efficient career builder</p>
         <a
           href="#contact"
           className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 font-semibold"
         >
-          Book Now
+          Start now
         </a>
       </section>
       <footer className="bg-gray-800 text-gray-300 py-6">
