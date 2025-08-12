@@ -27,7 +27,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+      <header className="bg-blue-600 text-white p-4">
+      <h1 className="text-xl font-bold">CareerCompass</h1>
+    </header>
+       {children}
+        <footer className="bg-gray-800 text-gray-300 py-6">
+        <div className="container mx-auto px-6 text-center">
+          <p>
+            © {new Date().getFullYear()} CareerCompass. All rights reserved.
+          </p>
+          <p className="text-sm mt-2">
+            Contact: info@careercompass.com | +91 234567
+          </p>
+        </div>
+      </footer>
       </body>
     </html>
   );
