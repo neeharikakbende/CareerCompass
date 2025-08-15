@@ -1,4 +1,4 @@
-export interface Profile {
+export interface Contact {
   name: string;
   objective: string;
   email: string;
@@ -6,27 +6,42 @@ export interface Profile {
   website: string;
   location: string;
 }
+
 export interface WorkExperience {
   company: string;
   jobTitle: string;
-  date: string;
-  description: string[];
+  date: string; 
+  description: string;
 }
+
 export interface Education {
-  school: string;
+  institution: string;
   degree: string;
-  date: string;
-  Additionalinformation: string[];
+  fieldOfStudy: string;
+  startDate: string;
+  endDate: string;
+  description: string;
 }
+
 export interface Project {
-  title: string;
+  name: string;
+  description: string;
   date: string;
-  description: string[];
+}
+
+export interface Skill {
+  name: string;
+  level: string;
+}
+export interface FeaturedSkill {
+  name: string;
+  proficiency: number; 
 }
 export interface Resume {
-  contact: Profile;
-  workExperience: WorkExperience[];
+  contact: Contact[];
+  work: WorkExperience[];
   education: Education[];
   projects: Project[];
-  skills: string[];
+  skills: Skill[];
+  featuredSkills?: FeaturedSkill[];
 }

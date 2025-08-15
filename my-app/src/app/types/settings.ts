@@ -3,7 +3,7 @@ export type SectionKey=
 |"education"
 |"projects"
 |"skills"
-|"conatact";
+|"contact";
 
 export interface SectionSetting{
   id:SectionKey;
@@ -18,4 +18,10 @@ export interface ThemeSetting{
 export interface LayoutSetting{
   pageSize:"A4"|"Letter";
   margin:number;
+}
+export interface ResumeSettings{
+  sections:SectionSetting[];
+  theme:ThemeSetting;
+  layout:LayoutSetting;
+  language:string;
 }
