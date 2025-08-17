@@ -3,7 +3,7 @@ export interface Contact {
   objective: string;
   email: string;
   phone: string;
-  website: string;
+  url: string;
   location: string;
 }
 
@@ -15,7 +15,7 @@ export interface WorkExperience {
 }
 
 export interface Education {
-  institution: string;
+  college: string;
   degree: string;
   fieldOfStudy: string;
   startDate: string;
@@ -43,5 +43,5 @@ export interface Resume {
   education: Education[];
   projects: Project[];
   skills: Skill[];
-  featuredSkills?: FeaturedSkill[];
+  featuredSkills: FeaturedSkill[];
 }
