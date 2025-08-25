@@ -1,5 +1,5 @@
 export type SectionKey=
-|"workExperience"
+|"workexperience"
 |"education"
 |"projects"
 |"skills"
