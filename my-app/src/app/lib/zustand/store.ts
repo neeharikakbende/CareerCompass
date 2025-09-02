@@ -489,7 +489,7 @@ export const useCustom=()=>useStore(selectCustom);
 export const useSettings=()=>useStore(selectSettings);
 export const useThemeColor=()=>useStore(selectThemeColor);
 export const useFormToShow=()=>useStore(selectFormToShow);
-export const useShowForm=(form:ShowForm)=>useStore((state)=>selectShowByForm(form)(state));
+export const useShowByForm=(form:ShowForm)=>useStore((state)=>selectShowByForm(form)(state));
 export const useFormToHeading=()=>useStore(selectFormToHeading);
 export const useHeadingByForm=(form:ShowForm)=>useStore((state)=>selectHeadingByForm(form)(state));
 export const useFormsOrder=()=>useStore(selectFormsOrder);

@@ -1,4 +1,4 @@
-import {cx} from "lib/cx";
+import { cx } from "@/app/lib/cx";
 
 const HEADING_CLASSNAMES={
     1:"text-2xl font-bold",
@@ -17,5 +17,16 @@ export const Heading=({
     className:string;
 
 })=>{
-    
-}
+ const Component=`h${level}` as const;
+ return (
+    <Component
+       className={cx(
+        "mt-[2em] text-gray-900",
+        HEADING_CLASSNAMES[level],
+        className
+       )}
+       >
+        {children}
+       </Component>
+ );
+};

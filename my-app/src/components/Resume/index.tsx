@@ -1,7 +1,7 @@
 "use client";
 import {useState,useMemo} from "react";
-import {ResumeIframeCSR} from "components/Resume/ResumeIframe";
-import {ResumePDF} from "components/Resume/ResumePDF";
+import { ResumeIframeCSR } from "./ResumeIFrame";
+import { ResumePDF } from "./ResumePDF";
 import{
     ResumeControlBarCSR,
     ResumeControlBarBorder,
