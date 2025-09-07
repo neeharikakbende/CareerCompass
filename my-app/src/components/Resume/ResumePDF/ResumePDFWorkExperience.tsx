@@ -1,11 +1,7 @@
 import { View } from "@react-pdf/renderer";
-import {
-  ResumePDFSection,
-  ResumePDFBulletList,
-  ResumePDFText,
-} from "components/Resume/ResumePDF/common";
-import { styles, spacing } from "components/Resume/ResumePDF/styles";
-import type { ResumeWorkExperience } from "lib/zustand/types";
+import { ResumePDFSection,ResumePDFBulletList,ResumePDFText } from "./common";
+import { styles,spacing } from "./styles";
+import type { ResumeWorkExperience } from "@/app/lib/zustand/types";
 
 export const ResumePDFWorkExperience = ({
   heading,
@@ -18,7 +14,7 @@ export const ResumePDFWorkExperience = ({
 }) => {
   return (
     <ResumePDFSection themeColor={themeColor} heading={heading}>
-      {workExperiences.map(({ company, jobTitle, date, descriptions }, idx) => {
+      {workExperiences.map(({ company, jobTitle, date, description }, idx) => {
         // Hide company name if it is the same as the previous company
         const hideCompanyName =
           idx > 0 && company === workExperiences[idx - 1].company;
@@ -30,7 +26,7 @@ export const ResumePDFWorkExperience = ({
             )}
             <View
               style={{
-                ...styles.flexRowBetween,
+                ...styles.flexRow,
                 marginTop: hideCompanyName
                   ? "-" + spacing["1"]
                   : spacing["1.5"],
@@ -40,7 +36,7 @@ export const ResumePDFWorkExperience = ({
               <ResumePDFText>{date}</ResumePDFText>
             </View>
             <View style={{ ...styles.flexCol, marginTop: spacing["1.5"] }}>
-              <ResumePDFBulletList items={descriptions} />
+              <ResumePDFBulletList items={description} />
             </View>
           </View>
         );

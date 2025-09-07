@@ -1,11 +1,7 @@
 import { View } from "@react-pdf/renderer";
-import {
-  ResumePDFSection,
-  ResumePDFBulletList,
-  ResumePDFText,
-} from "components/Resume/ResumePDF/common";
-import { styles, spacing } from "components/Resume/ResumePDF/styles";
-import type { ResumeProject } from "lib/zustand/types";
+import { ResumePDFSection,ResumePDFBulletList,ResumePDFText } from "./common";
+import { styles,spacing } from "./styles";
+import type { ResumeProject } from "@/app/lib/zustand/types";
 
 export const ResumePDFProject = ({
   heading,
@@ -18,11 +14,11 @@ export const ResumePDFProject = ({
 }) => {
   return (
     <ResumePDFSection themeColor={themeColor} heading={heading}>
-      {projects.map(({ project, date, descriptions }, idx) => (
+      {projects.map(({ project, date, description }, idx) => (
         <View key={idx}>
           <View
             style={{
-              ...styles.flexRowBetween,
+              ...styles.flexRow,
               marginTop: spacing["0.5"],
             }}
           >
@@ -30,7 +26,7 @@ export const ResumePDFProject = ({
             <ResumePDFText>{date}</ResumePDFText>
           </View>
           <View style={{ ...styles.flexCol, marginTop: spacing["0.5"] }}>
-            <ResumePDFBulletList items={descriptions} />
+            <ResumePDFBulletList items={description} />
           </View>
         </View>
       ))}

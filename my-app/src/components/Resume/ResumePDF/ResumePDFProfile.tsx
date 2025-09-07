@@ -1,15 +1,10 @@
 import { View } from "@react-pdf/renderer";
-import {
-  ResumePDFIcon,
+import { ResumePDFIcon, 
   type IconType,
-} from "components/Resume/ResumePDF/common/ResumePDFIcon";
-import { styles, spacing } from "components/Resume/ResumePDF/styles";
-import {
-  ResumePDFLink,
-  ResumePDFSection,
-  ResumePDFText,
-} from "components/Resume/ResumePDF/common";
-import type { ResumeProfile } from "lib/zustand/types";
+ } from "./common/ResumePDFIcon";
+import { styles,spacing } from "./styles";
+import { ResumePDFLink,ResumePDFSection,ResumePDFText } from "./common";
+import type { ResumeProfile } from "@/app/lib/zustand/types";
 
 export const ResumePDFProfile = ({
   profile,
@@ -20,7 +15,7 @@ export const ResumePDFProfile = ({
   themeColor: string;
   isPDF: boolean;
 }) => {
-  const { name, email, phone, url, summary, location } = profile;
+  const { name, email, phone, url, objective, location } = profile;
   const iconProps = { email, phone, location, url };
 
   return (
@@ -32,10 +27,10 @@ export const ResumePDFProfile = ({
       >
         {name}
       </ResumePDFText>
-      {summary && <ResumePDFText>{summary}</ResumePDFText>}
+      {objective && <ResumePDFText>{objective}</ResumePDFText>}
       <View
         style={{
-          ...styles.flexRowBetween,
+          ...styles.flexRow,
           flexWrap: "wrap",
           marginTop: spacing["0.5"],
         }}

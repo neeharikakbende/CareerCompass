@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import { A4_HEIGHT_PX, LETTER_HEIGHT_PX } from "@/app/lib/constants";
 import { getPxPerRem } from "@/app/lib/get-px-per-rem";
-import {CSS_VARIABLES} from "globals-css";
+import { CSS_VARIABLES } from "@/globals-css";
 
 export const useSetDefaultScale = ({
   setScale,

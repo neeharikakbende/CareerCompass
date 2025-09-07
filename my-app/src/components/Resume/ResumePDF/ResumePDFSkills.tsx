@@ -1,11 +1,7 @@
 import { View } from "@react-pdf/renderer";
-import {
-  ResumePDFSection,
-  ResumePDFBulletList,
-  ResumeFeaturedSkill,
-} from "components/Resume/ResumePDF/common";
-import { styles, spacing } from "components/Resume/ResumePDF/styles";
-import type { ResumeSkills } from "lib/zustand/types";
+import { ResumePDFSection,ResumePDFBulletList,ResumeFeaturedSkill } from "./common";
+import { styles,spacing } from "./styles";
+import type { ResumeSkills } from "@/app/lib/zustand/types";
 
 export const ResumePDFSkills = ({
   heading,
@@ -29,7 +25,7 @@ export const ResumePDFSkills = ({
   return (
     <ResumePDFSection themeColor={themeColor} heading={heading}>
       {featuredSkillsWithText.length > 0 && (
-        <View style={{ ...styles.flexRowBetween, marginTop: spacing["0.5"] }}>
+        <View style={{ ...styles.flexRow, marginTop: spacing["0.5"] }}>
           {featuredSkillsPair.map((pair, idx) => (
             <View
               key={idx}
@@ -40,7 +36,7 @@ export const ResumePDFSkills = ({
               {pair.map((featuredSkill, idx) => {
                 if (!featuredSkill) return null;
                 return (
-                  <ResumeFeaturedSkill
+                   <ResumeFeaturedSkill
                     key={idx}
                     skill={featuredSkill.skill}
                     rating={featuredSkill.rating}
