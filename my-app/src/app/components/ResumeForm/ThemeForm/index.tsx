@@ -7,7 +7,7 @@ import { DEFAULT_THEME_COLOR,
     type GeneralSetting,
  } from "@/app/lib/zustand/store";
 import { useSettings,useStoreActions } from "@/app/lib/zustand/store";
-import type { FontFamily } from "@/components/fonts/constants";
+import type { FontFamily } from "@/app/components/fonts/constants";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 export const ThemeForm = () => {

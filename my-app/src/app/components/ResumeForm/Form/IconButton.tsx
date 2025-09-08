@@ -1,4 +1,4 @@
-import { IconButton } from "@/components/Button";
+import { IconButton } from "@/app/components/Button";
 import {
   EyeIcon,
   EyeSlashIcon,

@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
-import { useEffect } from "react";
-import { useSetDefaultScale } from "components/Resume/hooks";
+import { JSX, useEffect } from "react";
+import { useSetDefaultScale } from "./hooks";
 import {
   MagnifyingGlassIcon,
   ArrowDownTrayIcon,
@@ -28,10 +28,8 @@ const ResumeControlBar = ({
   });
 
   const [instance, update] = usePDF({ document });
-
-  // Hook to update pdf when document changes
   useEffect(() => {
-    update();
+    update(document);
   }, [update, document]);
 
   return (
@@ -55,7 +53,7 @@ const ResumeControlBar = ({
             type="checkbox"
             className="mt-0.5 h-4 w-4"
             checked={scaleOnResize}
-            onChange={() => setScaleOnResize((prev: any) => !prev)}
+            onChange={() => setScaleOnResize((prev) => !prev)}
           />
           <span className="select-none">Autoscale</span>
         </label>
@@ -71,6 +69,7 @@ const ResumeControlBar = ({
     </div>
   );
 };
+
 
 export const ResumeControlBarCSR = dynamic(
   () => Promise.resolve(ResumeControlBar),

@@ -1,6 +1,6 @@
 "use client";
-import { ResumeForm } from "components/ResumeForm";
-import { Resume } from "@/components/Resume";
+import { ResumeForm } from "@/app/components/ResumeForm";
+import { Resume } from "@/app/components/Resume";
 
 export default function Create() {
   return (

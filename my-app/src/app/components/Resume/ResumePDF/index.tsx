@@ -1,15 +1,15 @@
 import { Page, View, Document } from "@react-pdf/renderer";
-import { styles, spacing } from "components/Resume/ResumePDF/styles";
-import { ResumePDFProfile } from "components/Resume/ResumePDF/ResumePDFProfile";
-import { ResumePDFWorkExperience } from "components/Resume/ResumePDF/ResumePDFWorkExperience";
-import { ResumePDFEducation } from "components/Resume/ResumePDF/ResumePDFEducation";
-import { ResumePDFProject } from "components/Resume/ResumePDF/ResumePDFProject";
-import { ResumePDFSkills } from "components/Resume/ResumePDF/ResumePDFSkills";
-import { ResumePDFCustom } from "components/Resume/ResumePDF/ResumePDFCustom";
-import { DEFAULT_FONT_COLOR } from "lib/zustand/constants";
+import { styles,spacing } from "./styles";
+import { ResumePDFProfile } from "./ResumePDFProfile";
+import { ResumePDFWorkExperience } from "./ResumePDFWorkExperience";
+import { ResumePDFEducation } from "./ResumePDFEducation";
+import { ResumePDFProject } from "./ResumePDFProject";
+import { ResumePDFSkills } from "./ResumePDFSkills";
+import { ResumePDFCustom } from "./ResumePDFCustom";
+import { DEFAULT_FONT_COLOR } from "@/app/lib/zustand/store";
 import type { Settings, ShowForm, Resume } from "@/app/lib/zustand/types";
-import { SuppressResumePDFErrorMessage } from "components/Resume/ResumePDF/common/SuppressResumePDFErrorMessage";
-import { Key } from "react";
+import { SuppressResumePDFErrorMessage } from "./common/SuppressResumePDFErrorMessage";
+import { JSX } from "react";
 
 export const ResumePDF=({
     resume,
