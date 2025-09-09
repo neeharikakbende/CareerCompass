@@ -26,7 +26,7 @@ export const ResumePDFWorkExperience = ({
             )}
             <View
               style={{
-                ...styles.flexRow,
+                ...styles.flexRowSpaceBetween,
                 marginTop: hideCompanyName
                   ? "-" + spacing["1"]
                   : spacing["1.5"],
