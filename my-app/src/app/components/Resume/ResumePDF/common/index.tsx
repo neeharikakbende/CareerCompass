@@ -86,13 +86,14 @@ export const ResumePDFBulletList = ({
   return (
     <>
       {items.map((item, idx) => (
-        <View style={{ ...styles.flexRow }} key={idx}>
+        <View style={{ ...styles.flexRow, alignItems:'flex-start' }} key={idx}>
           {showBulletPoints && (
             <ResumePDFText
               style={{
                 paddingLeft: spacing["2"],
                 paddingRight: spacing["2"],
                 lineHeight: "1.3",
+                flexShrink:0
               }}
               bold={true}
             >
@@ -100,7 +101,7 @@ export const ResumePDFBulletList = ({
             </ResumePDFText>
           )}
           <ResumePDFText
-            style={{ lineHeight: "1.3", flexGrow: 1, flexBasis: 0 }}
+            style={{ lineHeight: "1.3", flexGrow: 1, flexBasis: 0, flexWrap:'wrap' }}
           >
             {item}
           </ResumePDFText>
@@ -164,7 +165,7 @@ export const ResumeFeaturedSkill = ({
             width: "9pt",
             marginLeft: "2.25pt",
             backgroundColor: rating >= idx ? themeColor : "#d9d9d9",
-            borderRadius: "100%",
+            borderRadius: 4.5,
           }}
         />
       ))}

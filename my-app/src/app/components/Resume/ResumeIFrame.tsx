@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import {useMemo} from "react";
-import Frame from "react-frame-component"
-import { A4_HEIGHT_PX,A4_WIDTH_PT,A4_WIDTH_PX,LETTER_HEIGHT_PX,LETTER_WIDTH_PX,LETTER_WIDTH_PT } from "@/app/lib/constants";
+import React, { useMemo, useRef, useEffect, useState } from "react";
+import Frame from "react-frame-component";
+import {
+  A4_HEIGHT_PX,
+  A4_WIDTH_PX,
+  A4_WIDTH_PT,
+  LETTER_HEIGHT_PX,
+  LETTER_WIDTH_PX,
+  LETTER_WIDTH_PT,
+} from "@/app/lib/constants";
 import dynamic from "next/dynamic";
 import { getAllFontFamiliesToLoad } from "../fonts/lib";
 
@@ -12,18 +19,14 @@ const getIframeInitialContent = (isA4: boolean) => {
 
   const allFontFamiliesPreloadLinks = allFontFamilies
     .map(
-      (
-        font
-      ) => `<link rel="preload" as="font" href="/fonts/${font}-Regular.ttf" type="font/ttf" crossorigin="anonymous">
+      (font) => `<link rel="preload" as="font" href="/fonts/${font}-Regular.ttf" type="font/ttf" crossorigin="anonymous">
 <link rel="preload" as="font" href="/fonts/${font}-Bold.ttf" type="font/ttf" crossorigin="anonymous">`
     )
     .join("");
 
   const allFontFamiliesFontFaces = allFontFamilies
     .map(
-      (
-        font
-      ) => `@font-face {font-family: "${font}"; src: url("/fonts/${font}-Regular.ttf");}
+      (font) => `@font-face {font-family: "${font}"; src: url("/fonts/${font}-Regular.ttf");}
 @font-face {font-family: "${font}"; src: url("/fonts/${font}-Bold.ttf"); font-weight: bold;}`
     )
     .join("");
@@ -34,6 +37,7 @@ const getIframeInitialContent = (isA4: boolean) => {
     ${allFontFamiliesPreloadLinks}
     <style>
       ${allFontFamiliesFontFaces}
+      html, body { margin:0; padding:0; overflow:hidden; -webkit-text-size-adjust:none; }
     </style>
   </head>
   <body style='overflow: hidden; width: ${width}pt; margin: 0; padding: 0; -webkit-text-size-adjust:none;'>
@@ -42,10 +46,6 @@ const getIframeInitialContent = (isA4: boolean) => {
 </html>`;
 };
 
-/**
- * Iframe is used here for style isolation, since react pdf uses pt unit.
- * It creates a sandbox document body that uses letter/A4 pt size as width.
- */
 const ResumeIframe = ({
   documentSize,
   scale,
@@ -57,6 +57,23 @@ const ResumeIframe = ({
   children: React.ReactNode;
   enablePDFViewer?: boolean;
 }) => {
+  // Hooks unconditionally at top
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    ro.observe(el);
+    setContainerWidth(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+
   const isA4 = documentSize === "A4";
   const iframeInitialContent = useMemo(
     () => getIframeInitialContent(isA4),
@@ -65,36 +82,38 @@ const ResumeIframe = ({
 
   if (enablePDFViewer) {
     return (
-      <DynamicPDFViewer className="h-full w-full">
-        {children as any}
-      </DynamicPDFViewer>
+      <DynamicPDFViewer className="h-full w-full">{children as any}</DynamicPDFViewer>
     );
   }
-  const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
-  const height = isA4 ? A4_HEIGHT_PX : LETTER_HEIGHT_PX;
 
-  return (
-    <div
-      style={{
-        maxWidth: `${width * scale}px`,
-        maxHeight: `${height * scale}px`,
-      }}
-    >
-      {/* There is an outer div and an inner div here. The inner div sets the iframe width and uses transform scale to zoom in/out the resume iframe.
-        While zooming out or scaling down via transform, the element appears smaller but still occupies the same width/height. Therefore, we use the 
-        outer div to restrict the max width & height proportionally */}
+  // doc size in px
+  const docWidthPx = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
+  const docHeightPx = isA4 ? A4_HEIGHT_PX : LETTER_HEIGHT_PX;
+
+  // Base scale to fit 90% of container width
+  const baseScale = containerWidth ? (containerWidth * 0.9) / docWidthPx : 1;
+
+  // Effective scale: multiply base scale by user scale
+  const MIN_SCALE = 0.35;
+  const effectiveScale = Math.max(MIN_SCALE, baseScale * scale);
+
+   return (
+     <div
+       ref={containerRef}
+       className="w-full flex justify-center items-start"
+     >
       <div
         style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          transform: `scale(${scale})`,
+          width: `${docWidthPx}px`,
+          height: `${docHeightPx}px`,
+          transform: `scale(${effectiveScale})`,
+          transformOrigin: "top left",
         }}
-        className={`origin-top-left bg-white shadow-lg`}
+        className="bg-white shadow-lg rounded-lg"
       >
         <Frame
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", border: "none", overflow: "hidden" }}
           initialContent={iframeInitialContent}
-          // key is used to force component to re-mount when document size changes
           key={isA4 ? "A4" : "LETTER"}
         >
           {children}
@@ -111,10 +130,7 @@ export const ResumeIframeCSR = dynamic(() => Promise.resolve(ResumeIframe), {
   ssr: false,
 });
 
-// PDFViewer is only used for debugging. Its size is quite large, so we make it dynamic import
 const DynamicPDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((module) => module.PDFViewer),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );

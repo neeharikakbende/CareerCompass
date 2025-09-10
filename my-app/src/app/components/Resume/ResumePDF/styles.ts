@@ -42,7 +42,14 @@ export const styles=StyleSheet.create({
     flexRow:{
         display:"flex",
         flexDirection:"row",
+        justifyContent:"flex-start",
+        alignItems:"center",
+    },
+    flexRowSpaceBetween:{
+        display:"flex",
+        flexDirection:"row",
         justifyContent:"space-between",
+        alignItems:"center",
     },
     flexCol:{
         display:"flex",

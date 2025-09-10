@@ -1,6 +1,6 @@
 
 "use client";
-import { JSX, useEffect } from "react";
+import { JSX } from "react";
 import { useSetDefaultScale } from "./hooks";
 import {
   MagnifyingGlassIcon,
@@ -27,10 +27,7 @@ const ResumeControlBar = ({
     documentSize,
   });
 
-  const [instance, update] = usePDF({ document });
-  useEffect(() => {
-    update(document);
-  }, [update, document]);
+  const [instance] = usePDF({ document });
 
   return (
     <div className="sticky bottom-0 left-0 right-0 flex h-[var(--resume-control-bar-height)] items-center justify-center px-[var(--resume-padding)] text-gray-600 lg:justify-between">
@@ -60,8 +57,9 @@ const ResumeControlBar = ({
       </div>
       <a
         className="ml-1 flex items-center gap-1 rounded-md border border-gray-300 px-3 py-0.5 hover:bg-gray-100 lg:ml-8"
-        href={instance.url!}
+        href={instance.url ?? undefined}
         download={fileName}
+        aria-disabled={!instance.url}
       >
         <ArrowDownTrayIcon className="h-4 w-4" />
         <span className="whitespace-nowrap">Download Resume</span>

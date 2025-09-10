@@ -13,9 +13,6 @@ import type {
   FormWithBulletPoints,
   GeneralSetting,
 } from "./types";
-import { education, featuredSkills, projects } from "./default";
-import { profile } from "console";
-import { subscribe } from "diagnostics_channel";
 import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middleware";
 import { deepMerge } from "../deep-merge";
 
@@ -46,9 +43,9 @@ export const initialProject: ResumeProject = {
   description: [],
 };
 export const initialFeaturedSkill: FeaturedSkill = { skill: "", rating: 4 };
-export const initialFeaturedSkills: FeaturedSkill[] = Array(6).fill({
+export const initialFeaturedSkills: FeaturedSkill[] = Array.from({ length: 6 }, () => ({
   ...initialFeaturedSkill,
-});
+}));
 export const initialSkills: ResumeSkills = {
   featuredSkills: initialFeaturedSkills,
   descriptions: [],
@@ -74,7 +71,7 @@ export const initialSettings: Settings = {
   themeColor: DEFAULT_THEME_COLOR,
   fontFamily: DEFAULT_FONT_FAMILY,
   fontSize: DEFAULT_FONT_SIZE,
-  documentSize: "Letter",
+  documentSize: "A4",
   formToShow: {
     workExperiences: true,
     educations: true,
@@ -181,7 +178,7 @@ export const useStore=create<StoreState>()(
             return{
               resume:{
                 ...state.resume,
-                education:newEducations,
+                educations:newEducations,
               },
             };
           }); 
@@ -263,7 +260,7 @@ export const useStore=create<StoreState>()(
               return{
                 resume:{
                   ...state.resume,
-                  education:[...state.resume.educations,structuredClone(initialEducation)],
+                  educations:[...state.resume.educations,structuredClone(initialEducation)],
                 },
               };
             }
@@ -424,7 +421,7 @@ export const useStore=create<StoreState>()(
             if(state.resume){
               state.resume=deepMerge(initialResumeState,state.resume) as Resume;
             }
-            if(state.resume){
+            if(state.settings){
               state.settings=deepMerge(initialSettings,state.settings) as Settings;
             }
           }
