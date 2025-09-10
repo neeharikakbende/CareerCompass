@@ -18,7 +18,7 @@ export const ResumePDFProject = ({
         <View key={idx}>
           <View
             style={{
-              ...styles.flexRow,
+              ...styles.flexRowSpaceBetween,
               marginTop: spacing["0.5"],
             }}
           >

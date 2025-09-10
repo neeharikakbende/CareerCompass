@@ -10,7 +10,7 @@ export const useSetDefaultScale = ({
   setScale: (scale: number) => void;
   documentSize: string;
 }) => {
-  const [scaleOnResize, setScaleOnResize] = useState(true);
+  const [scaleOnResize, setScaleOnResize] = useState(false);
 
   useEffect(() => {
     const getDefaultScale = () => {

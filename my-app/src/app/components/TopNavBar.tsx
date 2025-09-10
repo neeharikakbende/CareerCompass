@@ -3,21 +3,21 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cx } from "@/app/lib/cx";
 
-export const TopNavBar=() => {
-  const pathName=usePathname();
+export const TopNavBar = () => {
+  const pathName = usePathname();
   const isHomePage = pathName === "/";
-  
-  return(
-   <header 
-    aria-label="Site Header"
-    className={cx(
-        "flex h-[var(--top-nav-bar-height)] items-center border-b-2 border-gray-100 px-3 lg:px-12",
-        isHomePage && "bg-dot"
-    )}
-   > 
-    <div className="flex h-10 w-full items-center justify-between">
-        <Link href="/">
-        <span className="sr-only">CareerCompass</span>
+
+  return (
+    <header
+      aria-label="Site Header"
+      className={cx(
+        "flex h-[var(--top-nav-bar-height)] items-center border-b-2 border-gray-100 bg-white px-3 lg:px-12",
+        isHomePage ? "bg-transparent border-transparent" : "bg-white border-gray-100"
+      )}
+    >
+      <div className="flex h-10 w-full items-center justify-between">
+        <Link href="/" className="text-xl font-bold text-gray-900 hover:text-gray-700">
+          CareerCompass
         </Link>
         <nav
           aria-label="Site Nav Bar"
@@ -35,8 +35,8 @@ export const TopNavBar=() => {
               {text}
             </Link>
           ))}
-          </nav>
-    </div>
+        </nav>
+      </div>
     </header>
   );
 };

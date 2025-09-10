@@ -30,7 +30,7 @@ export const ResumePDFEducation = ({
               )}
               <View
                 style={{
-                  ...styles.flexRow,
+                  ...styles.flexRowSpaceBetween,
                   marginTop: hideSchoolName
                     ? "-" + spacing["1"]
                     : spacing["1.5"],
