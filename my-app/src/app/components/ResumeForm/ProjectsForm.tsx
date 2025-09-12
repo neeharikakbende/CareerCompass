@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Form,FormSection } from "./Form";
 import { Input,
   BulletListTextarea,
@@ -21,6 +21,7 @@ export const ProjectsForm=() => {
             value,
           ]: CreateHandleChangeArgsWithDescriptions<ResumeProject>
         ) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           changeProjects({ idx, field, value } as any);
         };
         const showMoveUp = idx !== 0;
