@@ -4,7 +4,7 @@ import type { TextItems, Line, Lines } from "./types";
 export const groupTextItemsIntoLines = (textItems : TextItems): Lines => {
     const lines:Lines=[];
     let line: Line = [];
-    for (let item of textItems) {
+    for (const item of textItems) {
         if (item.hasEOL) {
             if(item.text.trim() !== "") {
                 line.push({ ...item });
@@ -22,7 +22,7 @@ export const groupTextItemsIntoLines = (textItems : TextItems): Lines => {
     }
 
     const typicalCharWidth = getTypicalCharWidth(lines.flat());
-    for (let line of lines) {
+    for (const line of lines) {
         for (let i = line.length - 1; i > 0; i--) {
             const currentItem = line[i];
             const leftItem = line[i - 1];
@@ -49,6 +49,59 @@ const shouldAddSpaceBetweenText = (leftText: string, rightText: string) => {
     const conditions = [
         [":", ",", "|", ".", ...BULLET_POINTS].includes(leftTextEnd) &&
           righttextStart !== " ",
-        leftTextEnd !== " " && ["|", ...BULLET_POINTS].includes  
-    ]
-}
+        leftTextEnd !== " " && ["|", ...BULLET_POINTS].includes(righttextStart),  
+    ];
+
+    return conditions.some((condition) => condition);
+};
+
+const getTypicalCharWidth = (textItems: TextItems): number => {
+  textItems = textItems.filter((item) => item.text.trim() !== "");
+
+  const heightToCount: { [height: number]: number } = {};
+  let commonHeight = 0;
+  let heightMaxCount = 0;
+
+  const fontNameToCount: { [fontName: string]: number } = {};
+  let commonFontName = "";
+  let fontNameMaxCount = 0;
+
+  for (const item of textItems) {
+    const { text, height, fontName } = item;
+    // Process height
+    if (!heightToCount[height]) {
+      heightToCount[height] = 0;
+    }
+    heightToCount[height]++;
+    if (heightToCount[height] > heightMaxCount) {
+      commonHeight = height;
+      heightMaxCount = heightToCount[height];
+    }
+
+ 
+    if (!fontNameToCount[fontName]) {
+      fontNameToCount[fontName] = 0;
+    }
+    fontNameToCount[fontName] += text.length;
+    if (fontNameToCount[fontName] > fontNameMaxCount) {
+      commonFontName = fontName;
+      fontNameMaxCount = fontNameToCount[fontName];
+    }
+  }
+
+  
+  const commonTextItems = textItems.filter(
+    (item) => item.fontName === commonFontName && item.height === commonHeight
+  );
+
+  const [totalWidth, numChars] = commonTextItems.reduce(
+    (acc, cur) => {
+      const [preWidth, prevChars] = acc;
+      return [preWidth + cur.width, prevChars + cur.text.length];
+    },
+    [0, 0]
+  );
+  const typicalCharWidth = totalWidth / numChars;
+
+  return typicalCharWidth;
+};
