@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useMemo, useRef, useEffect, useState } from "react";
+import { PDFViewer } from "@react-pdf/renderer";
 import Frame from "react-frame-component";
 import {
   A4_HEIGHT_PX,
@@ -19,14 +20,18 @@ const getIframeInitialContent = (isA4: boolean) => {
 
   const allFontFamiliesPreloadLinks = allFontFamilies
     .map(
-      (font) => `<link rel="preload" as="font" href="/fonts/${font}-Regular.ttf" type="font/ttf" crossorigin="anonymous">
+      (
+        font
+      ) => `<link rel="preload" as="font" href="/fonts/${font}-Regular.ttf" type="font/ttf" crossorigin="anonymous">
 <link rel="preload" as="font" href="/fonts/${font}-Bold.ttf" type="font/ttf" crossorigin="anonymous">`
     )
     .join("");
 
   const allFontFamiliesFontFaces = allFontFamilies
     .map(
-      (font) => `@font-face {font-family: "${font}"; src: url("/fonts/${font}-Regular.ttf");}
+      (
+        font
+      ) => `@font-face {font-family: "${font}"; src: url("/fonts/${font}-Regular.ttf");}
 @font-face {font-family: "${font}"; src: url("/fonts/${font}-Bold.ttf"); font-weight: bold;}`
     )
     .join("");
@@ -82,7 +87,9 @@ const ResumeIframe = ({
 
   if (enablePDFViewer) {
     return (
-      <DynamicPDFViewer className="h-full w-full">{children as any}</DynamicPDFViewer>
+      <DynamicPDFViewer className="h-full w-full">
+        {children as any}
+      </DynamicPDFViewer>
     );
   }
 
@@ -97,11 +104,8 @@ const ResumeIframe = ({
   const MIN_SCALE = 0.35;
   const effectiveScale = Math.max(MIN_SCALE, baseScale * scale);
 
-   return (
-     <div
-       ref={containerRef}
-       className="w-full flex justify-center items-start"
-     >
+  return (
+    <div ref={containerRef} className="w-full flex justify-center items-start">
       <div
         style={{
           width: `${docWidthPx}px`,
@@ -112,7 +116,12 @@ const ResumeIframe = ({
         className="bg-white shadow-lg rounded-lg"
       >
         <Frame
-          style={{ width: "100%", height: "100%", border: "none", overflow: "hidden" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            border: "none",
+            overflow: "hidden",
+          }}
           initialContent={iframeInitialContent}
           key={isA4 ? "A4" : "LETTER"}
         >
@@ -130,7 +139,4 @@ export const ResumeIframeCSR = dynamic(() => Promise.resolve(ResumeIframe), {
   ssr: false,
 });
 
-const DynamicPDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((module) => module.PDFViewer),
-  { ssr: false }
-);
+const DynamicPDFViewer = dynamic(async () => PDFViewer, { ssr: false });

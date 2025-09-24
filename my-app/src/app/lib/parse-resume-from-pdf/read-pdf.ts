@@ -1,16 +1,19 @@
 import * as pdfjs from "pdfjs-dist";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-pdfjs.GlobalWOrkerOptions.workerSrc=pdfjsWorker;
+// import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+// pdfjs.GlobalWorkerOptions.workerSrc=pdfjsWorker;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 
-import type {TextItem as PdfjsTextItem} from "pdfjs-dist/types/src/display/api";
-import type { TextItem,TextItems } from "./types";
+import type { TextItem as PdfjsTextItem } from "pdfjs-dist/types/src/display/api";
+import type { TextItem, TextItems } from "./types";
 
 export const readPdf = async (fileUrl: string): Promise<TextItems> => {
   const pdfFile = await pdfjs.getDocument(fileUrl).promise;
   let textItems: TextItems = [];
 
   for (let i = 1; i <= pdfFile.numPages; i++) {
-    // Parse each page into text content
     const page = await pdfFile.getPage(i);
     const textContent = await page.getTextContent();
     await page.getOperatorList();
@@ -18,18 +21,18 @@ export const readPdf = async (fileUrl: string): Promise<TextItems> => {
     const pageTextItems = textContent.items.map((item) => {
       const {
         str: text,
-        dir, 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        dir,
         transform,
         fontName: pdfFontName,
         ...otherProps
       } = item as PdfjsTextItem;
 
-
       const x = transform[4];
       const y = transform[5];
       const fontObj = commonObjs.get(pdfFontName);
       const fontName = fontObj.name;
-      const newText = text.replace(/-­‐/g, "-");
+      const newText = text.replace(/--/g, "-");
 
       const newItem = {
         ...otherProps,
