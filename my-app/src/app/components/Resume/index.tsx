@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { ResumeIframeCSR } from "./ResumeIFrame";
 import { ResumePDF } from "./ResumePDF";
 import { ResumeControlBarCSR } from "./ResumeControlBar";
@@ -16,10 +16,8 @@ export const Resume = () => {
   const [scale, setScale] = useState(1);
   const resume = useResume();
   const settings = useSettings();
-  const document = useMemo(
-    () => <ResumePDF resume={resume} settings={settings} isPDF={true} />,
-    [resume, settings]
-  );
+  // document preview element is no longer memoized here; the control bar
+  // now builds the PDF document from the store when needed.
 
   useRegisterReactPDFFont();
   useRegisterReactPDFHyphenationCallback(settings.fontFamily);
@@ -50,7 +48,6 @@ export const Resume = () => {
         scale={scale}
         setScale={setScale}
         documentSize={settings.documentSize}
-        document={document}
         fileName={resume.profile.name + " - Resume"}
       />
     </>

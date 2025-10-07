@@ -101,7 +101,7 @@ export const ResumePDFBulletList = ({
             </ResumePDFText>
           )}
           <ResumePDFText
-            style={{ lineHeight: "1.3", flexGrow: 1, flexBasis: 0, flexWrap:'wrap' }}
+            style={{ lineHeight: "1.3", flexGrow: 1, flexBasis: 0, flexWrap:'wrap', flexShrink: 1 }}
           >
             {item}
           </ResumePDFText>

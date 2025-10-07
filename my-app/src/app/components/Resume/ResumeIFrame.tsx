@@ -4,10 +4,8 @@ import React, { useMemo, useRef, useEffect, useState } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import Frame from "react-frame-component";
 import {
-  A4_HEIGHT_PX,
   A4_WIDTH_PX,
   A4_WIDTH_PT,
-  LETTER_HEIGHT_PX,
   LETTER_WIDTH_PX,
   LETTER_WIDTH_PT,
 } from "@/app/lib/constants";
@@ -42,11 +40,32 @@ const getIframeInitialContent = (isA4: boolean) => {
     ${allFontFamiliesPreloadLinks}
     <style>
       ${allFontFamiliesFontFaces}
-      html, body { margin:0; padding:0; overflow:hidden; -webkit-text-size-adjust:none; }
+      /* Hide scrollbars but allow scrolling */
+      html, body { margin:0; padding:0; overflow:auto; overflow-x: hidden; -webkit-text-size-adjust:none; -ms-overflow-style: none; scrollbar-width: none; }
+      /* WebKit browsers */
+      body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  /* Page wrapper: each .cc-page represents a single printed page size. */
+  .cc-page { box-sizing: border-box; width: ${width}pt; margin: 12pt auto; background: white; }
+  /* Ensure content inside a page breaks to next page when needed */
+  .cc-page * { box-sizing: border-box; }
+      /* Force wrapping for long text to avoid horizontal overflow in preview */
+      body, div, p, span, a, li, td, th { word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
+      /* Ensure images and svgs never overflow the page width */
+      img, svg { max-width: 100%; height: auto; }
+      /* Aggressive overrides to override inline styles from injected content */
+      #cc-root, #cc-root * {
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      /* Allow page breaks for long content when printing */
+      .cc-page { page-break-after: always; }
     </style>
   </head>
-  <body style='overflow: hidden; width: ${width}pt; margin: 0; padding: 0; -webkit-text-size-adjust:none;'>
-    <div></div>
+  <body style='overflow: auto; overflow-x: hidden; width: ${width}pt; margin: 0; padding: 0; -webkit-text-size-adjust:none; -ms-overflow-style: none; scrollbar-width: none;'>
+    <div id="cc-root" style="height:100%; overflow-y:auto; overflow-x:hidden;"></div>
   </body>
 </html>`;
 };
@@ -93,39 +112,45 @@ const ResumeIframe = ({
     );
   }
 
-  // doc size in px
+  // doc size in px - used as the page width for CSS
   const docWidthPx = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
-  const docHeightPx = isA4 ? A4_HEIGHT_PX : LETTER_HEIGHT_PX;
 
-  // Base scale to fit 90% of container width
-  const baseScale = containerWidth ? (containerWidth * 0.9) / docWidthPx : 1;
+  // Base scale to fit 90% of container width (applies to page wrapper)
+  const baseScale = containerWidth ? (containerWidth * 0.93) / docWidthPx : 1;
 
-  // Effective scale: multiply base scale by user scale
   const MIN_SCALE = 0.35;
   const effectiveScale = Math.max(MIN_SCALE, baseScale * scale);
 
   return (
-    <div ref={containerRef} className="w-full flex justify-center items-start">
+    <div ref={containerRef} className="w-full flex justify-center items-start" style={{ overflowX: "hidden" }}>
       <div
         style={{
-          width: `${docWidthPx}px`,
-          height: `${docHeightPx}px`,
           transform: `scale(${effectiveScale})`,
           transformOrigin: "top left",
+          overflowX: "hidden",
         }}
         className="bg-white shadow-lg rounded-lg"
       >
         <Frame
           style={{
-            width: "100%",
-            height: "100%",
+            width: `${docWidthPx}px`,
+            // Make the iframe height match the available app viewport (subtract top nav and control bar)
+            height: "calc(100vh - var(--top-nav-bar-height) - var(--resume-control-bar-height))",
             border: "none",
-            overflow: "hidden",
+            overflow: "auto",
+            overflowX: "hidden",
           }}
           initialContent={iframeInitialContent}
           key={isA4 ? "A4" : "LETTER"}
         >
-          {children}
+          {/* The children passed in are react-pdf Document/Page components when PDF mode is enabled
+              or HTML content. For HTML resume content, we render it inside pages by wrapping with
+              .cc-page elements. If children are a React element (not string), we attempt to mount
+              them inside the iframe root and let CSS paginate. */}
+          <div id="cc-content-wrapper" style={{ width: "100%" }}>
+            {/* Render children as-is; consumer can include page wrappers or we rely on the CSS page size. */}
+            {children}
+          </div>
         </Frame>
       </div>
     </div>
